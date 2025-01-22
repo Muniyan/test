@@ -50,7 +50,7 @@ export class AppComponent {
   ];
 
   
-  login(_t28: any) {
+  login() {
   }
 
   sendMessage() {
