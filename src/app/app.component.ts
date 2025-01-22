@@ -1,4 +1,5 @@
-import { Component } from '@angular/core';
+import { Component, ViewChild } from '@angular/core';
+import { NgbModal } from '@ng-bootstrap/ng-bootstrap';
 
 @Component({
   selector: 'app-root',
@@ -13,22 +14,8 @@ export class AppComponent {
 
   public isShow: boolean = false;
   public phone: string = '';
-  public currentUser = {
-    id: 2,
-    name: 'msquare',
-    phone: '9363995200',
-    roomId: {
-      1: 'room-1'
-    }
-  };
-  public selectedUser = {
-    id: 2,
-    name: 'msquare',
-    phone: '9363995200',
-    roomId: {
-      1: 'room-1'
-    }
-  };
+  public currentUser: any;
+  public selectedUser: any;
 
   public userList = [
     {
@@ -49,8 +36,29 @@ export class AppComponent {
     }
   ];
 
+  @ViewChild('popup', {static: false}) popup: any;
+
+  constructor(
+    private modelService: NgbModal,
+  ) {}
+
+  ngAfterViewInit(): void {
+    this.openPopup(this.popup);
+  }
+
+  openPopup(content: any): void {
+    this.modelService.open(content, {backdrop: 'static', centered: true})
+  }
+
   
-  login(_t28: any) {
+  login(dismiss: any) {
+    this.currentUser = this.userList.find(user => user.phone === this.phone.toLowerCase());
+    this.userList = this.userList.filter(user => user.phone !== this.phone.toLowerCase());
+
+    if(this.currentUser) {
+      this.isShow = true;
+      dismiss();
+    }
   }
 
   sendMessage() {
